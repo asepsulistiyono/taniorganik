@@ -1,97 +1,384 @@
 <!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>coder-app-name</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <style>
-      /* 内联样式确保主题色立即生效，避免闪烁 */
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-      }
-      html.light,
-      html.light body {
-        background-color: #ffffff !important;
-        color: #000000;
-      }
-      html.dark,
-      html.dark body {
-        background-color: #1a1a1a !important;
-        color: #ffffff;
-      }
-    </style>
-    <script>
-      // 在 React 加载前立即设置主题，避免闪烁
-      (function () {
-        const isInIframe = window.self !== window.top;
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kebun Pak Tani — Sayur &amp; Buah Organik Segar, Lembang</title>
+  <meta name="description" content="Pesan sayur dan buah organik segar langsung dari kebun di Lembang. Dipetik pagi, diantar hari yang sama. Bayam, kangkung, sawi, pepaya, pisang, dan hasil panen musiman." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%232F5E33'/%3E%3Cpath d='M32 13c11 7 17 15 17 25 0 9-7 13-17 13S15 47 15 38c0-10 6-18 17-25z' fill='%23C2D98A'/%3E%3Cpath d='M32 20v27M32 30l-7-5M32 38l8-6' stroke='%232F5E33' stroke-width='2.6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
 
-        function applyThemeToDOM(theme) {
-          document.documentElement.classList.remove("light", "dark");
-          document.documentElement.classList.add(theme);
-          document.documentElement.setAttribute("data-theme", theme);
-        }
+  <!-- ══════════ PAPAN PANEN BERJALAN (isi otomatis dari data produk) ══════════ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="tickerTrack">
+      <span class="ticker-item">Panen pagi ini: bayam segar</span>
+      <span class="ticker-item">Kangkung baru dipetik</span>
+      <span class="ticker-item">Pepaya matang pohon</span>
+      <span class="ticker-item">Pisang manis</span>
+      <span class="ticker-item">Sawi hijau renyah</span>
+      <span class="ticker-item">100% organik &bull; tanpa pestisida kimia</span>
+      <span class="ticker-item">Antar area Lembang &amp; Bandung Utara</span>
+    </div>
+  </div>
 
-        if (isInIframe) {
-          // 监听父窗口主动推送的主题消息
-          window.addEventListener("message", function (event) {
-            if (event.data && typeof event.data.theme === "string") {
-              const theme = event.data.theme;
-              if (theme === "light" || theme === "dark") {
-                applyThemeToDOM(theme);
-              }
-            }
-          });
-        } else {
-          // 非 iframe 环境，使用默认 light 主题
-          applyThemeToDOM("light");
-        }
-      })();
-    </script>
-      <script>
-      (function () {
-        if (window.self === window.top) return;
-        var reported = {};
-        window.addEventListener("error", function (event) {
-          // 资源加载失败的 error 事件没有 message，此处仅上报 JS 运行时错误
-          if (!event || !event.message) return;
-          var key =
-            event.message + "|" + (event.filename || "") + "|" + (event.lineno || 0);
-          if (reported[key]) return; // 相同错误只上报一次，避免渲染循环刷屏
-          reported[key] = true;
-          try {
-            window.parent.postMessage(
-              {
-                type: "sandbox-runtime-error",
-                payload: {
-                  message: String(event.message).slice(0, 500),
-                  filename: event.filename || "",
-                  lineno: event.lineno || 0,
-                  colno: event.colno || 0,
-                  stack:
-                    event.error && event.error.stack
-                      ? String(event.error.stack).slice(0, 2000)
-                      : ""
-                }
-              },
-              "*"
-            );
-          } catch (e) {
-            /* 上报失败不影响页面运行 */
-          }
-        });
-      })();
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <!-- ══════════ HEADER / NAVIGASI ══════════ -->
+  <!-- [GANTI] nama kebun di bawah ini sesuai kebun Anda -->
+  <header class="nav" id="nav">
+    <a class="brand" href="#beranda">
+      <svg class="brand-logo" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="var(--hijau)"/><path d="M20 7.5c7 4.4 10.8 9.6 10.8 16 0 5.7-4.4 8.3-10.8 8.3S9.2 29.2 9.2 23.5c0-6.4 3.8-11.6 10.8-16z" fill="var(--lime)"/><path d="M20 12v18M20 18.5l-4.6-3.4M20 23.5l5.2-3.8" stroke="var(--hijau)" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
+      <span class="brand-teks">Kebun <em>Pak Tani</em><small>organik &bull; lembang</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Navigasi utama">
+      <a href="#panen">Hasil Panen</a>
+      <a href="#pesan">Pesan</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#panduan" class="link-panduan">Panduan Pemilik</a>
+    </nav>
+    <div class="nav-aksi">
+      <!-- [GANTI] nomor WhatsApp kebun (format 62xxx, tanpa tanda +) -->
+      <a class="btn btn-kecil btn-wa" href="https://wa.me/6281234567890" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-2.9-.4-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4 0-.5.2-.8l.4-.5c.1-.2.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.9.9-1.1 2.1-.6 3.4.7 1.7 2 3.2 3.6 4.1 2.1 1.2 3.4 1.3 4.5.9.7-.2 1.4-.8 1.6-1.5.2-.6.2-1.1.1-1.2z"/></svg>
+        <span>WhatsApp</span>
+      </a>
+      <button class="btn-keranjang" id="btnBukaKeranjang" aria-label="Buka keranjang belanja">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 9h13l-1.2 10.2a2 2 0 0 1-2 1.8H8.7a2 2 0 0 1-2-1.8L5.5 9z"/><path d="M8.5 9V7a3.5 3.5 0 0 1 7 0v2"/><path d="M9.5 13v3M14.5 13v3"/></svg>
+        <span class="badge" id="badgeKeranjang" hidden>0</span>
+      </button>
+      <button class="btn-nav-toggle" id="btnNavToggle" aria-label="Buka menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menu mobile -->
+  <div class="menu-mobile" id="menuMobile" hidden>
+    <a href="#panen">Hasil Panen</a>
+    <a href="#pesan">Cara Pesan</a>
+    <a href="#tentang">Tentang Kebun</a>
+    <a href="#panduan">Panduan Pemilik</a>
+  </div>
+
+  <!-- Muncul otomatis saat website belum dihubungkan ke Google Apps Script -->
+  <div class="banner-demo" id="bannerDemo" hidden>
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 21v-8"/><path d="M12 13c0-4 2.5-7 7-7 0 4-2.5 7-7 7z"/><path d="M12 13c0-4-2.5-7-7-7 0 4 2.5 7 7 7z"/></svg>
+    <span><strong>Mode demo</strong> — produk &amp; pesanan masih data contoh. Hubungkan Google Sheets Anda: buka <code>script.js</code> baris <code>API_URL</code>, atau lihat <a href="#panduan">Panduan Pemilik</a>.</span>
+    <button class="tutup-banner" id="tutupBanner" aria-label="Tutup">&times;</button>
+  </div>
+
+  <main>
+    <!-- ══════════ PEMBUKA: lapak kebun ══════════ -->
+    <section class="pembuka" id="beranda">
+      <div class="pembuka-teks">
+        <p class="chip-musim reveal"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 21v-8"/><path d="M12 13c0-4 2.5-7 7-7 0 4-2.5 7-7 7z"/><path d="M12 13c0-4-2.5-7-7-7 0 4 2.5 7 7 7z"/></svg> Jadwal panen: Selasa &amp; Jumat</p>
+        <h1 class="judul-besar">
+          <span class="lm"><span>Panen pagi ini,</span></span>
+          <span class="lm"><span>segar sampai</span></span>
+          <span class="lm"><span>ke dapur <em>Anda.</em></span></span>
+        </h1>
+        <p class="pembuka-desk reveal">Kami keluarga petani di lereng Lembang. Sayur dan buah ditanam tanpa pestisida kimia, dipetik subuh hari panen, lalu diantar sebelum makan siang. Pilih hasil panen di bawah, isi formulir, selesai.</p>
+        <div class="pembuka-aksi reveal">
+          <a href="#panen" class="btn btn-utama">Lihat Hasil Panen
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16m0 0l-6-6m6 6l6-6"/></svg>
+          </a>
+          <a href="https://wa.me/6281234567890" target="_blank" rel="noopener" class="btn btn-garis">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2.6-.9 1.2-1.6 1.5-1.1.4-2.4.3-4.5-.9-1.6-.9-2.9-2.4-3.6-4.1-.5-1.3-.3-2.5.6-3.4.2-.2.5-.3.7-.3h.5c.1 0 .3-.1.5.4l.8 1.9c.1.2.1.3 0 .5l-.4.5c-.2.3-.5.4-.2.8a6.7 6.7 0 0 0 3.3 2.9c.2.1.4.1.5-.1.2-.2.6-.8.8-1 .1-.2.3-.2.5-.1.2.1 1.5.7 1.7.8.1.1.2.6-.1 1.6z"/></svg>
+            Chat Penjual
+          </a>
+        </div>
+        <ul class="pembuka-info reveal">
+          <!-- [GANTI] lokasi kebun Anda -->
+          <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg> Ds. Sukamaju, Lembang, Bandung Barat</li>
+          <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg> Antar: Selasa &amp; Jumat, 08.00–11.00</li>
+          <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c5.5 3.4 8.5 7.4 8.5 11.5 0 4-3.6 6.5-8.5 6.5s-8.5-2.5-8.5-6.5C3.5 10.4 6.5 6.4 12 3z"/><path d="M12 8v10M12 12l-3-2.2M12 15l3.4-2.5"/></svg> 100% organik, pupuk kompos sendiri</li>
+        </ul>
+      </div>
+      <div class="pembuka-visual reveal">
+        <div class="bingkai-daun">
+          <img src="https://image.qwenlm.ai/generated-images/1e90c94f-25c7-48e9-a65c-fad0ddd48f71/_result.png" alt="Peti kayu berisi hasil panen sayur dan buah organik" loading="eager" />
+        </div>
+        <div class="stiker stiker-putar" aria-hidden="true">
+          <svg viewBox="0 0 120 120"><defs><path id="lingkaran" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><circle cx="60" cy="60" r="58" fill="var(--panen)"/><circle cx="60" cy="60" r="50" fill="none" stroke="var(--krem)" stroke-width="1.4" stroke-dasharray="4 5"/><text font-family="Fraunces, serif" font-weight="700" font-size="13.5" letter-spacing="2.6" fill="var(--coklat)"><textPath href="#lingkaran">100% ORGANIK • TANPA PESTISIDA •&#160;</textPath></text><path d="M60 40c7 4.5 10.5 9.8 10.5 16.2 0 5.9-4.5 8.6-10.5 8.6s-10.5-2.7-10.5-8.6C49.5 49.8 53 44.5 60 40z" fill="var(--hijau)"/><path d="M60 45v16M60 51l-3.8-2.8M60 55.5l4.2-3" stroke="var(--lime)" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg>
+        </div>
+        <div class="stiker stiker-kertas" aria-hidden="true">Dipetik subuh &middot; diantar pagi</div>
+      </div>
+    </section>
+
+    <!-- ══════════ DAFTAR PRODUK / HASIL PANEN ══════════ -->
+    <section class="bagian" id="panen">
+      <div class="kepala-bagian">
+        <p class="eyebrow reveal">Hasil panen hari ini</p>
+        <h2 class="judul reveal">Pilih sayur &amp; buah <em>segar</em>
+          <svg class="coretan" viewBox="0 0 220 14" aria-hidden="true"><path d="M4 10 C 50 3, 120 3, 216 8" fill="none" stroke="var(--panen)" stroke-width="5" stroke-linecap="round"/></svg>
+        </h2>
+        <p class="sub reveal">Stok diperbarui setiap hari panen. Jenis sayur &amp; buah bisa berganti mengikuti musim — yang pasti: semuanya dipetik segar.</p>
+      </div>
+      <div class="filter-chips reveal" id="filterChips" role="tablist" aria-label="Filter kategori"></div>
+      <div class="grid-produk" id="gridProduk" aria-live="polite"><!-- diisi script.js --></div>
+    </section>
+
+    <!-- ══════════ FORMULIR PESANAN ══════════ -->
+    <section class="bagian bagian-pesan" id="pesan">
+      <div class="kepala-bagian">
+        <p class="eyebrow reveal">Formulir pesanan</p>
+        <h2 class="judul reveal">Pesan hasil <em>panen</em>
+          <svg class="coretan" viewBox="0 0 220 14" aria-hidden="true"><path d="M4 10 C 50 3, 120 3, 216 8" fill="none" stroke="var(--panen)" stroke-width="5" stroke-linecap="round"/></svg>
+        </h2>
+        <p class="sub reveal">Isi data pengiriman, pesanan Anda langsung tercatat di spreadsheet kami. Konfirmasi &amp; pembayaran lewat WhatsApp.</p>
+      </div>
+      <div class="pesan-wrap">
+        <form id="formPesanan" class="form reveal" novalidate>
+          <div class="field">
+            <label for="fNama">Nama lengkap <b>*</b></label>
+            <input type="text" id="fNama" name="nama" placeholder="cth. Bu Sari" autocomplete="name" />
+            <p class="err" id="errNama"></p>
+          </div>
+          <div class="field">
+            <label for="fWA">No. WhatsApp <b>*</b></label>
+            <input type="tel" id="fWA" name="wa" inputmode="numeric" placeholder="cth. 0812 3456 7890" autocomplete="tel" />
+            <p class="err" id="errWA"></p>
+          </div>
+          <div class="field">
+            <label for="fAlamat">Alamat lengkap <b>*</b></label>
+            <textarea id="fAlamat" name="alamat" rows="3" placeholder="Nama jalan, nomor rumah, patokan, kecamatan…"></textarea>
+            <p class="err" id="errAlamat"></p>
+          </div>
+          <div class="field-duo">
+            <div class="field">
+              <label for="fTanggal">Tanggal kirim <b>*</b></label>
+              <input type="date" id="fTanggal" name="tanggal_kirim" />
+              <p class="err" id="errTanggal"></p>
+            </div>
+            <div class="field">
+              <label for="fCatatan">Catatan <span class="opsional">(opsional)</span></label>
+              <input type="text" id="fCatatan" name="catatan" placeholder="cth. taruh di pagar hitam" />
+            </div>
+          </div>
+        </form>
+
+        <aside class="nota reveal" aria-live="polite">
+          <div class="nota-kepala">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-2.4-1.6L13.2 21l-2.4-1.6L8.4 21 6 19.4V3z"/><path d="M9 8h6M9 12h6"/></svg>
+            Nota Pesanan
+          </div>
+          <div id="notaIsi"><!-- diisi script.js: kosong / rincian / sukses --></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ══════════ CARA PESAN (3 langkah) ══════════ -->
+    <section class="cara" id="cara">
+      <div class="cara-isi">
+        <p class="eyebrow eyebrow-terang reveal">Gampang sekali</p>
+        <h2 class="judul judul-terang reveal">Cara pesan dalam 3 langkah</h2>
+        <ol class="langkah-list">
+          <li class="langkah reveal">
+            <span class="angka">01</span>
+            <div><h3>Pilih hasil panen</h3><p>Masukkan sayur &amp; buah ke keranjang. Atur jumlah sesuai kebutuhan.</p></div>
+          </li>
+          <li class="langkah reveal">
+            <span class="angka">02</span>
+            <div><h3>Isi formulir pengiriman</h3><p>Nama, alamat, nomor WhatsApp, dan tanggal kirim yang Anda inginkan.</p></div>
+          </li>
+          <li class="langkah reveal">
+            <span class="angka">03</span>
+            <div><h3>Konfirmasi via WhatsApp</h3><p>Kami balas untuk konfirmasi stok &amp; pembayaran. Pesanan diantar segar.</p></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ══════════ TENTANG KEBUN ══════════ -->
+    <section class="bagian tentang" id="tentang">
+      <div class="tentang-grid">
+        <div class="tentang-foto reveal">
+          <div class="bingkai-foto">
+            <img src="https://image.qwenlm.ai/generated-images/5fde36b3-2d5a-445a-a6b2-f94ec04266b9/_result.png" alt="Tangan petani memegang sayur segar yang baru dipanen" loading="lazy" />
+          </div>
+          <span class="stiker stiker-kertas stiker-foto" aria-hidden="true">Sejak 1998 &middot; turun-temurun</span>
+        </div>
+        <div class="tentang-teks">
+          <p class="eyebrow reveal">Tentang kebun kami</p>
+          <h2 class="judul reveal">Dikelola dengan <em>sabar,</em> ditanam dengan <em>sayang</em></h2>
+          <p class="reveal">Kebun Pak Tani dimulai dari sepetak lahan warisan keluarga. Kami memutuskan bertani organik penuh sejak 2016: pupuk dari kompos buatan sendiri, pembasmi hama dari daun mimba dan serangga baik, serta rotasi tanam agar tanah tetap hidup.</p>
+          <p class="reveal">Hasilnya mungkin tidak semulus sayur supermarket — kadang ada lubang kecil dimakan ulat — tapi rasanya jujur dan aman dimakan langsung dari pohon.</p>
+          <dl class="info-toko reveal">
+            <!-- [GANTI] informasi toko di bawah ini -->
+            <div><dt><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M4 9c1.8 1.4 4 1.4 5.4 0 1.4 1.4 3.6 1.4 5.2 0 1.4 1.4 3.6 1.4 5.4 0M9 20v-6h6v6"/></svg> Nama kebun</dt><dd>Kebun Pak Tani</dd></div>
+            <div><dt><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg> Lokasi</dt><dd>Jl. Raya Sukamaju No. 12, Lembang, Bandung Barat, Jawa Barat</dd></div>
+            <div><dt><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg> Panen &amp; antar</dt><dd>Selasa &amp; Jumat &middot; pengantaran 08.00–11.00 WIB</dd></div>
+            <div><dt><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2.6-.9 1.2-1.6 1.5-1.1.4-2.4.3-4.5-.9-1.6-.9-2.9-2.4-3.6-4.1-.5-1.3-.3-2.5.6-3.4.2-.2.5-.3.7-.3h.5c.1 0 .3-.1.5.4l.8 1.9c.1.2.1.3 0 .5l-.4.5c-.2.3-.5.4-.2.8a6.7 6.7 0 0 0 3.3 2.9c.2.1.4.1.5-.1.2-.2.6-.8.8-1 .1-.2.3-.2.5-.1.2.1 1.5.7 1.7.8.1.1.2.6-.1 1.6z"/></svg> WhatsApp</dt><dd><a href="https://wa.me/6281234567890" target="_blank" rel="noopener">0812-3456-7890 (Pak Tani)</a></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ PANDUAN PEMILIK (setup Google Sheets + Apps Script) ══════════ -->
+    <section class="panduan" id="panduan">
+      <div class="panduan-kepala">
+        <p class="eyebrow eyebrow-krem reveal">Khusus pemilik kebun</p>
+        <h2 class="judul judul-krem reveal">Hubungkan website ke <em>Google Sheets</em></h2>
+        <p class="sub sub-krem reveal">Website ini sudah jadi. Agar menampilkan produk asli Anda dan menyimpan pesanan otomatis, ikuti 4 langkah di bawah. <strong>100% gratis</strong> — hanya butuh akun Google. Setiap langkah bisa dibuka-tutup.</p>
+      </div>
+
+      <!-- Langkah 1: struktur Sheets -->
+      <details class="akordeon reveal" open>
+        <summary><span class="nomor">1</span> Siapkan Google Sheets <svg class="panah" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="akordeon-isi">
+          <p>Buat spreadsheet baru di <a href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a>, lalu buat <strong>2 sheet (tab)</strong> persis dengan nama dan kolom berikut:</p>
+          <div class="tabel-wrap">
+            <h4>Sheet <code>Produk</code> — daftar dagangan Anda</h4>
+            <table>
+              <thead><tr><th>Kolom</th><th>Isi</th><th>Contoh</th></tr></thead>
+              <tbody>
+                <tr><td><code>ID</code></td><td>Kode unik produk</td><td>P01</td></tr>
+                <tr><td><code>Nama</code></td><td>Nama sayur/buah</td><td>Bayam Hijau</td></tr>
+                <tr><td><code>Harga</code></td><td>Harga (angka saja, tanpa titik)</td><td>8000</td></tr>
+                <tr><td><code>Satuan</code></td><td>Satuan jual</td><td>ikat / kg / biji</td></tr>
+                <tr><td><code>Stok</code></td><td>Jumlah stok (angka)</td><td>24</td></tr>
+                <tr><td><code>Gambar_URL</code></td><td>Link foto (kosongkan jika tidak ada)</td><td>https://…jpg</td></tr>
+                <tr><td><code>Kategori</code></td><td>Sayur / Buah / Lainnya</td><td>Sayur</td></tr>
+                <tr><td><code>Status</code></td><td>Tersedia / Habis</td><td>Tersedia</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tabel-wrap">
+            <h4>Sheet <code>Pesanan</code> — otomatis terisi saat ada yang memesan</h4>
+            <table>
+              <thead><tr><th>Kolom</th><th>Keterangan</th></tr></thead>
+              <tbody>
+                <tr><td><code>Timestamp</code></td><td>Waktu pesanan masuk (otomatis)</td></tr>
+                <tr><td><code>Nama_Pemesan</code></td><td>Nama pembeli</td></tr>
+                <tr><td><code>Alamat</code></td><td>Alamat pengiriman</td></tr>
+                <tr><td><code>No_WA</code></td><td>Nomor WhatsApp pembeli</td></tr>
+                <tr><td><code>Produk</code></td><td>Rincian produk &amp; jumlah</td></tr>
+                <tr><td><code>Jumlah</code></td><td>Total jumlah per satuan</td></tr>
+                <tr><td><code>Total_Harga</code></td><td>Total belanja (rupiah)</td></tr>
+                <tr><td><code>Tanggal_Kirim</code></td><td>Tanggal kirim pilihan pembeli</td></tr>
+                <tr><td><code>Status_Pesanan</code></td><td>Otomatis terisi &ldquo;Menunggu Konfirmasi&rdquo; — ubah manual sesuai proses</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tips"><strong>Tips cepat:</strong> tidak ingin mengetik manual? Setelah memasang kode Apps Script (langkah 2), jalankan fungsi <code>setupSheets()</code> satu kali — kedua sheet, judul kolom, dan 3 produk contoh akan dibuat otomatis.</p>
+        </div>
+      </details>
+
+      <!-- Langkah 2: kode Apps Script -->
+      <details class="akordeon reveal">
+        <summary><span class="nomor">2</span> Pasang kode Google Apps Script <svg class="panah" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="akordeon-isi">
+          <ol class="ol-rapi">
+            <li>Di spreadsheet, menu <strong>Extensions &rarr; Apps Script</strong> (tab baru terbuka).</li>
+            <li>Hapus semua isi editor, lalu <strong>tempel seluruh kode di bawah</strong> (tombol <em>Salin kode</em> ada di kanan atas kotak kode).</li>
+            <li>Ganti <code>SHEET_ID</code> dengan ID spreadsheet Anda — ada di alamat URL, di antara <code>/d/</code> dan <code>/edit</code>.</li>
+            <li>Klik ikon <strong>Simpan</strong> (gambar disket di toolbar) atau tekan <code>Ctrl+S</code>.</li>
+          </ol>
+          <div class="kode-blok">
+            <div class="kode-bar">
+              <span class="kode-judul">Code.gs — tempel di script.google.com</span>
+              <button class="btn-salin" id="btnSalinKode" type="button">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Salin kode</span>
+              </button>
+            </div>
+            <pre class="kode-pre"><code id="kodeAppsScript"></code></pre>
+          </div>
+        </div>
+      </details>
+
+      <!-- Langkah 3: deploy -->
+      <details class="akordeon reveal">
+        <summary><span class="nomor">3</span> Deploy sebagai Web App <svg class="panah" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="akordeon-isi">
+          <ol class="ol-rapi">
+            <li>Di editor Apps Script, klik <strong>Deploy &rarr; New deployment</strong> &rarr; pilih tipe <strong>Web app</strong>.</li>
+            <li>Isi: <em>Description</em> = &ldquo;API Kebun v1&rdquo;.</li>
+            <li><strong>Execute as: Me</strong> (akun Anda).</li>
+            <li><strong>Who has access: Anyone</strong> — ini wajib agar website bisa mengakses.</li>
+            <li>Klik <strong>Deploy</strong>, lalu <strong>Authorize access</strong> (izinkan akses saat diminta — pilih akun Google Anda, klik <em>Advanced &rarr; Go to project</em>).</li>
+            <li><strong>Salin Web App URL</strong> — bentuknya <code>https://script.google.com/macros/s/AKfycb…/exec</code>.</li>
+            <li>Uji di browser: buka <code>URL-anda/exec?action=ping</code> dan <code>URL-anda/exec?action=produk</code>. Jika muncul teks JSON, API berhasil jalan.</li>
+          </ol>
+          <p class="tips"><strong>Penting:</strong> setiap kali mengubah kode, ulangi deploy dengan <strong>Deploy &rarr; Manage deployments &rarr; ✏️ Edit &rarr; Version: New version</strong>, lalu Deploy lagi. URL tetap sama.</p>
+        </div>
+      </details>
+
+      <!-- Langkah 4: hubungkan -->
+      <details class="akordeon reveal">
+        <summary><span class="nomor">4</span> Hubungkan ke website ini <svg class="panah" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+        <div class="akordeon-isi">
+          <ol class="ol-rapi">
+            <li>Buka file <code>script.js</code> website ini. Di bagian paling atas ada baris:<br /><code class="kode-inline">const API_URL = "[ISI_DISINI]";</code></li>
+            <li>Ganti <code>[ISI_DISINI]</code> dengan Web App URL dari langkah 3 (akhiran <code>/exec</code>).</li>
+            <li>Ganti juga <code>WA_NUMBER</code> di baris bawahnya dengan nomor WhatsApp kebun Anda (format <code>62xxx</code>).</li>
+            <li>Ganti nama kebun, alamat, dan nomor WA di <code>index.html</code> — cari komentar <code>[GANTI]</code>.</li>
+            <li>Muat ulang website — banner &ldquo;mode demo&rdquo; hilang, dan produk tampil dari Google Sheets Anda. Coba pesan: data masuk ke sheet <code>Pesanan</code>.</li>
+          </ol>
+          <h4>Hosting gratis (agar bisa diakses pembeli)</h4>
+          <p>Website ini hanya 3 file (<code>index.html</code>, <code>style.css</code>, <code>script.js</code>) — unggah gratis ke <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>, <a href="https://www.netlify.com" target="_blank" rel="noopener">Netlify Drop</a> (tinggal seret folder ke netlify.com/drop), atau <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>. Selesai — website Anda online tanpa biaya server.</p>
+          <p class="tips"><strong>Update stok sehari-hari:</strong> cukup ubah angka di kolom <code>Stok</code> dan <code>Status</code> sheet <code>Produk</code> — website langsung mengikuti. Tambah jenis panen musiman? Tambah baris baru saja.</p>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <svg class="brand-logo" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="var(--lime)"/><path d="M20 7.5c7 4.4 10.8 9.6 10.8 16 0 5.7-4.4 8.3-10.8 8.3S9.2 29.2 9.2 23.5c0-6.4 3.8-11.6 10.8-16z" fill="var(--hijau-gelap)"/><path d="M20 12v18M20 18.5l-4.6-3.4M20 23.5l5.2-3.8" stroke="var(--lime)" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
+        <p class="footer-nama">Kebun <em>Pak Tani</em></p>
+        <p class="footer-tag">Sayur &amp; buah organik dari lereng Lembang. Dipetik pagi, sampai sebelum makan siang.</p>
+      </div>
+      <div class="footer-kolom">
+        <h4>Kontak</h4>
+        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener">WhatsApp 0812-3456-7890</a>
+        <a href="#tentang">Ds. Sukamaju, Lembang</a>
+        <a href="#panen">Hasil panen minggu ini</a>
+      </div>
+      <div class="footer-kolom">
+        <h4>Jadwal</h4>
+        <p>Panen: Selasa &amp; Jumat</p>
+        <p>Antar: 08.00–11.00 WIB</p>
+        <p>Area: Lembang &amp; Bandung Utara</p>
+      </div>
+    </div>
+    <div class="footer-bawah">
+      <span>&copy; 2026 Kebun Pak Tani</span>
+      <span class="footer-teknis">Tanpa server &middot; ditenagai Google Sheets + Apps Script</span>
+    </div>
+  </footer>
+
+  <!-- ══════════ DRAWER KERANJANG ══════════ -->
+  <div class="drawer-latar" id="drawerLatar" hidden></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Keranjang belanja">
+    <div class="drawer-kepala">
+      <h3>Keranjang Panen</h3>
+      <button class="btn-tutup" id="btnTutupDrawer" aria-label="Tutup keranjang">&times;</button>
+    </div>
+    <div class="drawer-isi" id="drawerIsi"></div>
+    <div class="drawer-kaki" id="drawerKaki"></div>
+  </aside>
+
+  <!-- Bar keranjang mengambang (mobile) -->
+  <button class="cartbar" id="cartbar" hidden>
+    <span class="cartbar-info"><strong id="cartbarJumlah">0</strong> jenis &middot; <span id="cartbarTotal">Rp 0</span></span>
+    <span class="cartbar-cta">Lihat Keranjang
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6"/></svg>
+    </span>
+  </button>
+
+  <!-- Notifikasi toast -->
+  <div class="toast-wadah" id="toastWadah" aria-live="polite"></div>
+
+  <!-- Daun dekoratif mengambang -->
+  <svg class="daun-ambang daun-1" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 4c15 8.5 23 19 23 31 0 11-9 17-23 17S7 46 7 35C7 23 15 12.5 30 4z" fill="none" stroke="var(--hijau)" stroke-width="1.6"/><path d="M30 14v34M30 24l-9-6.5M30 34l10-7.5" fill="none" stroke="var(--hijau)" stroke-width="1.6" stroke-linecap="round"/></svg>
+  <svg class="daun-ambang daun-2" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 4c15 8.5 23 19 23 31 0 11-9 17-23 17S7 46 7 35C7 23 15 12.5 30 4z" fill="none" stroke="var(--panen)" stroke-width="1.6"/><path d="M30 14v34M30 24l-9-6.5M30 34l10-7.5" fill="none" stroke="var(--panen)" stroke-width="1.6" stroke-linecap="round"/></svg>
+
+  <script type="module" src="./script.js"></script>
+</body>
 </html>

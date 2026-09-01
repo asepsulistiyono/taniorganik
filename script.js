@@ -13,7 +13,7 @@
 // ─────────────────────────── KONFIGURASI ───────────────────────────
 // [ISI_DISINI] → ganti dengan URL Web App Apps Script Anda (akhiran /exec).
 // Contoh: "https://script.google.com/macros/s/AKfycbx…/exec"
-const API_URL = "[ISI_DISINI]";
+const API_URL = "https://script.google.com/macros/s/AKfycbz9xRawK9TX9lO1utZ1MT3uOvH-EIMMVv8HRJn_8TDrmHIY7VRkllU3x3WRj52l9Eau/exec";
 
 // [GANTI] → nomor WhatsApp kebun, format 62xxx (tanpa + atau spasi)
 const WA_NUMBER = "6281234567890";

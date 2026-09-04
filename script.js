@@ -605,7 +605,7 @@ function tampilanSukses(s) {
 function buatLinkWA(s) {
   const rincian = s.items.map((it) => "- " + it.nama + " " + it.jumlah + " " + it.satuan + " (" + rupiah(it.subtotal) + ")").join("\n");
   const teks =
-    "Halo Kebun Pak Tani! Saya ingin konfirmasi pesanan dari website.\n\n" +
+    "Halo Kebun Pak Asep! Saya ingin konfirmasi pesanan dari website.\n\n" +
     "No. pesanan: " + s.id + "\n" + rincian + "\nTotal: " + rupiah(s.total) + "\n" +
     "Tanggal kirim: " + s.tanggal_kirim + "\n\n" +
     "Nama: " + s.nama + "\nAlamat: " + s.alamat + (s.catatan ? "\nCatatan: " + s.catatan : "");

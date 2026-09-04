@@ -16,7 +16,7 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbz9xRawK9TX9lO1utZ1MT3uOvH-EIMMVv8HRJn_8TDrmHIY7VRkllU3x3WRj52l9Eau/exec";
 
 // [GANTI] → nomor WhatsApp kebun, format 62xxx (tanpa + atau spasi)
-const WA_NUMBER = "6281234567890";
+const WA_NUMBER = "6281387016337";
 
 // ─────────────────────────── DATA DEMO ─────────────────────────────
 // Dipakai hanya selama API_URL belum diisi. Ganti/sesuaikan bebas.

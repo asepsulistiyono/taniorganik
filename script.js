@@ -151,7 +151,7 @@ function renderTicker() {
     ...tersedia.slice(0, 8).map((p) => p.nama + " segar"),
     "100% organik tanpa pestisida kimia",
     "Panen Selasa & Jumat",
-    "Antar area Lembang & Bandung Utara",
+    "Antar area Karawang & Cikampek",
   ];
   const html = items.map((t) => '<span class="ticker-item">' + esc(t) + "</span>").join("");
   // digandakan 2x agar animasi geser menyambung tanpa putus
